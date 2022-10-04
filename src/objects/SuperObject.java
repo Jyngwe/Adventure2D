@@ -12,6 +12,12 @@ public abstract class SuperObject implements Interactable {
     public int worldX;
     public int worldY;
 
+    public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
+    public int solidAreaDefaultX = 0;
+    public int solidAreaDefaultY = 0;
+
+    public boolean collission;
+
     public void draw(Graphics2D g2, GamePanel gamePanel) {
 
         int screenX = worldX - gamePanel.getPlayer().worldX + gamePanel.getPlayer().screenX;

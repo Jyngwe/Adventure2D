@@ -2,6 +2,7 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import objects.SuperObject;
 
 import java.awt.*;
 import java.io.IOException;
@@ -15,7 +16,6 @@ public class Player extends Entity implements LivingEntity {
     EntityImage image = null;
 
 
-
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
@@ -23,7 +23,7 @@ public class Player extends Entity implements LivingEntity {
         screenX = GamePanel.SCREEN_WIDTH/2 - (GamePanel.TITLE_SIZE/2);
         screenY = GamePanel.SCREEN_HEIGHT/2 - (GamePanel.TITLE_SIZE/2);
 
-        solidArea = new Rectangle(8, 16, 32, 32);
+        setSolidArea(new Rectangle(8, 16, 32, 32));
 
         setDefaultValues();
         getImages();
@@ -49,6 +49,8 @@ public class Player extends Entity implements LivingEntity {
 
         collisionOn = false;
         gamePanel.collisionChecker.checkTitle(this);
+        int objectIndex = gamePanel.collisionChecker.checkObject(this, true);
+
         if (!collisionOn) {
             switch (keyHandler.getDirection()) {
                 case UP -> worldY -= speed;
@@ -57,8 +59,8 @@ public class Player extends Entity implements LivingEntity {
                 case RIGHT -> worldX += speed;
             }
         }
-        if (gamePanel.getPlayer().getAction() == Action.INTERACT) {
-
+        if (getAction() == Action.INTERACT) {
+            pickUpObject(objectIndex);
         }
     }
 
@@ -83,4 +85,13 @@ public class Player extends Entity implements LivingEntity {
     public Action getAction() {
         return keyHandler.getAction();
     }
+
+    public void pickUpObject(int index) {
+        if (index != -1) {
+            final SuperObject object = gamePanel.getObjects().get(index);
+
+            gamePanel.getObjects().remove(object);
+        }
+    }
+
 }

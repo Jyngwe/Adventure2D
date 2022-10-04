@@ -12,10 +12,10 @@ public class ActionChecker {
 
     public void checkTitle(Entity entity) {
 
-        int entityLeftWorldX = entity.worldX + entity.solidArea.x;
-        int entityRightWorldX = entity.worldX + entity.solidArea.x + entity.solidArea.width;
-        int entityTopWorldY = entity.worldY + entity.solidArea.y;
-        int entityBottomWorldY = entity.worldY + entity.solidArea.y + entity.solidArea.height;
+        int entityLeftWorldX = entity.worldX + entity.getSolidArea().x;
+        int entityRightWorldX = entity.worldX + entity.getSolidArea().x + entity.getSolidArea().width;
+        int entityTopWorldY = entity.worldY + entity.getSolidArea().y;
+        int entityBottomWorldY = entity.worldY + entity.getSolidArea().y + entity.getSolidArea().height;
 
         int entityLeftCol = entityLeftWorldX / GamePanel.TITLE_SIZE;
         int entityRightCol = entityRightWorldX / GamePanel.TITLE_SIZE;

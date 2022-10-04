@@ -26,7 +26,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Getter
     private Player player = new Player(this, keyHandler);
-    public ArrayList<SuperObject> objects = new ArrayList<>();
+    @Getter
+    private ArrayList<SuperObject> objects = new ArrayList<>();
 
     public TitleManager titleManager = new TitleManager(this);
     public CollisionChecker collisionChecker = new CollisionChecker(this);

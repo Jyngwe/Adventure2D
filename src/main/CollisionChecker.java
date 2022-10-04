@@ -1,6 +1,7 @@
 package main;
 
 import entity.Entity;
+import objects.SuperObject;
 
 public class CollisionChecker {
 
@@ -12,10 +13,10 @@ public class CollisionChecker {
 
     public void checkTitle(Entity entity) {
 
-        int entityLeftWorldX = entity.worldX + entity.solidArea.x;
-        int entityRightWorldX = entity.worldX + entity.solidArea.x + entity.solidArea.width;
-        int entityTopWorldY = entity.worldY + entity.solidArea.y;
-        int entityBottomWorldY = entity.worldY + entity.solidArea.y + entity.solidArea.height;
+        int entityLeftWorldX = entity.worldX + entity.getSolidArea().x;
+        int entityRightWorldX = entity.worldX + entity.getSolidArea().x + entity.getSolidArea().width;
+        int entityTopWorldY = entity.worldY + entity.getSolidArea().y;
+        int entityBottomWorldY = entity.worldY + entity.getSolidArea().y + entity.getSolidArea().height;
 
         int entityLeftCol = entityLeftWorldX / GamePanel.TITLE_SIZE;
         int entityRightCol = entityRightWorldX / GamePanel.TITLE_SIZE;
@@ -63,5 +64,77 @@ public class CollisionChecker {
             }
         }
 
+    }
+
+    public int checkObject(Entity entity, boolean player) {
+        int index = -1;
+
+        for (final SuperObject object : gamePanel.getObjects()) {
+            entity.getSolidArea().x = entity.worldX + entity.getSolidArea().x;
+            entity.getSolidArea().y = entity.worldY + entity.getSolidArea().y;
+
+            object.solidArea.x = object.worldX + object.solidArea.x;
+            object.solidArea.y = object.worldY + object.solidArea.y;
+
+            switch (entity.getDirection()) {
+                case NONE -> {
+                }
+                case UP -> {
+                    entity.getSolidArea().y -= entity.speed;
+                    if (entity.getSolidArea().intersects(object.solidArea)) {
+                        if (object.collission) {
+                            entity.collisionOn = true;
+                        }
+                        if (player) {
+                            index = gamePanel.getObjects().indexOf(object);
+                        }
+                    }
+                }
+                case DOWN -> {
+                    entity.getSolidArea().y += entity.speed;
+                    if (entity.getSolidArea().intersects(object.solidArea)) {
+                        if (entity.getSolidArea().intersects(object.solidArea)) {
+                            if (object.collission) {
+                                entity.collisionOn = true;
+                            }
+                            if (player) {
+                                index = gamePanel.getObjects().indexOf(object);
+                            }
+                        }
+                    }
+                }
+                case LEFT -> {
+                    entity.getSolidArea().x -= entity.speed;
+                    if (entity.getSolidArea().intersects(object.solidArea)) {
+                        if (entity.getSolidArea().intersects(object.solidArea)) {
+                            if (object.collission) {
+                                entity.collisionOn = true;
+                            }
+                            if (player) {
+                                index = gamePanel.getObjects().indexOf(object);
+                            }
+                        }
+                    }
+                }
+                case RIGHT -> {
+                    entity.getSolidArea().x += entity.speed;
+                    if (entity.getSolidArea().intersects(object.solidArea)) {
+                        if (object.collission) {
+                            entity.collisionOn = true;
+                        }
+                        if (player) {
+                            index = gamePanel.getObjects().indexOf(object);
+                        }
+                    }
+                }
+            }
+            entity.getSolidArea().x = entity.getSolidAreaDefaultX();
+            entity.getSolidArea().y = entity.getSolidAreaDefaultY();
+            object.solidArea.x = object.solidAreaDefaultX;
+            object.solidArea.y = object.solidAreaDefaultY;
+
+        }
+
+        return index;
     }
 }

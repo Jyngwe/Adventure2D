@@ -9,6 +9,8 @@ import java.io.IOException;
 
 public class Player extends Entity implements LivingEntity {
 
+    Inventory inventory;
+
     public final int screenX;
     public final int screenY;
     GamePanel gamePanel;
@@ -19,6 +21,7 @@ public class Player extends Entity implements LivingEntity {
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
+        this.inventory = new Inventory();
 
         screenX = GamePanel.SCREEN_WIDTH/2 - (GamePanel.TITLE_SIZE/2);
         screenY = GamePanel.SCREEN_HEIGHT/2 - (GamePanel.TITLE_SIZE/2);
@@ -59,7 +62,7 @@ public class Player extends Entity implements LivingEntity {
                 case RIGHT -> worldX += speed;
             }
         }
-        if (getAction() == Action.INTERACT) {
+        if (getAction() == Action.PICKUP) {
             pickUpObject(objectIndex);
         }
     }
@@ -75,6 +78,15 @@ public class Player extends Entity implements LivingEntity {
         }
 
         g.drawImage(image.getCurrentImage(), screenX, screenY, GamePanel.TITLE_SIZE, GamePanel.TITLE_SIZE, null);
+
+
+        if (inventory.getLeftHand() != null) {
+            g.drawImage(inventory.getLeftHand().image, screenX - 20, screenY, GamePanel.TITLE_SIZE, GamePanel.TITLE_SIZE, null);
+        }
+
+        if (inventory.getRightHand() != null) {
+            g.drawImage(inventory.getRightHand().image, screenX + 20, screenY + 15, GamePanel.TITLE_SIZE, GamePanel.TITLE_SIZE, null);
+        }
     }
 
     @Override
@@ -89,6 +101,14 @@ public class Player extends Entity implements LivingEntity {
     public void pickUpObject(int index) {
         if (index != -1) {
             final SuperObject object = gamePanel.getObjects().get(index);
+
+            if (inventory.getLeftHand() == null) {
+                inventory.setLeftHand(object);
+            } else if (inventory.getRightHand() == null) {
+                inventory.setRightHand(object);
+            } else {
+                inventory.setLeftHand(object);
+            }
 
             gamePanel.getObjects().remove(object);
         }

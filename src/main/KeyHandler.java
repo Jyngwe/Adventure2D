@@ -4,16 +4,16 @@ import entity.Action;
 import entity.Direction;
 import lombok.Getter;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 
 @Getter
-public class KeyHandler implements KeyListener {
+public class KeyHandler implements KeyListener, MouseListener {
 
     private Direction direction;
     private Action action;
     private boolean directionChanged;
     protected Direction lastDirection;
+
     public KeyHandler() {
         this.direction = Direction.NONE;
     }
@@ -32,7 +32,7 @@ public class KeyHandler implements KeyListener {
             case KeyEvent.VK_S -> direction = Direction.DOWN;
             case KeyEvent.VK_A -> direction = Direction.LEFT;
             case KeyEvent.VK_D -> direction = Direction.RIGHT;
-            case KeyEvent.VK_E -> action = Action.INTERACT;
+            case KeyEvent.VK_E -> action = Action.PICKUP;
         }
 
         directionChanged = lastDirection != direction;
@@ -43,6 +43,28 @@ public class KeyHandler implements KeyListener {
         lastDirection = direction;
         direction = Direction.NONE;
         action = Action.NONE;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        action = Action.INTERACT;
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        action = Action.NONE;
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
 
 }

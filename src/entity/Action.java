@@ -2,5 +2,6 @@ package entity;
 
 public enum Action {
     NONE,
-    INTERACT;
+    INTERACT,
+    PICKUP;
 }

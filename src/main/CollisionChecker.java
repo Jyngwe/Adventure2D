@@ -73,15 +73,15 @@ public class CollisionChecker {
             entity.getSolidArea().x = entity.worldX + entity.getSolidArea().x;
             entity.getSolidArea().y = entity.worldY + entity.getSolidArea().y;
 
-            object.solidArea.x = object.worldX + object.solidArea.x;
-            object.solidArea.y = object.worldY + object.solidArea.y;
+            object.getSolidArea().x = object.getWorldX() + object.getSolidArea().x;
+            object.getSolidArea().y = object.getWorldY() + object.getSolidArea().y;
 
             switch (entity.getDirection()) {
                 case NONE -> {
                 }
                 case UP -> {
                     entity.getSolidArea().y -= entity.speed;
-                    if (entity.getSolidArea().intersects(object.solidArea)) {
+                    if (entity.getSolidArea().intersects(object.getSolidArea())) {
                         if (object.collission) {
                             entity.collisionOn = true;
                         }
@@ -92,8 +92,8 @@ public class CollisionChecker {
                 }
                 case DOWN -> {
                     entity.getSolidArea().y += entity.speed;
-                    if (entity.getSolidArea().intersects(object.solidArea)) {
-                        if (entity.getSolidArea().intersects(object.solidArea)) {
+                    if (entity.getSolidArea().intersects(object.getSolidArea())) {
+                        if (entity.getSolidArea().intersects(object.getSolidArea())) {
                             if (object.collission) {
                                 entity.collisionOn = true;
                             }
@@ -105,8 +105,8 @@ public class CollisionChecker {
                 }
                 case LEFT -> {
                     entity.getSolidArea().x -= entity.speed;
-                    if (entity.getSolidArea().intersects(object.solidArea)) {
-                        if (entity.getSolidArea().intersects(object.solidArea)) {
+                    if (entity.getSolidArea().intersects(object.getSolidArea())) {
+                        if (entity.getSolidArea().intersects(object.getSolidArea())) {
                             if (object.collission) {
                                 entity.collisionOn = true;
                             }
@@ -118,7 +118,7 @@ public class CollisionChecker {
                 }
                 case RIGHT -> {
                     entity.getSolidArea().x += entity.speed;
-                    if (entity.getSolidArea().intersects(object.solidArea)) {
+                    if (entity.getSolidArea().intersects(object.getSolidArea())) {
                         if (object.collission) {
                             entity.collisionOn = true;
                         }
@@ -130,8 +130,8 @@ public class CollisionChecker {
             }
             entity.getSolidArea().x = entity.getSolidAreaDefaultX();
             entity.getSolidArea().y = entity.getSolidAreaDefaultY();
-            object.solidArea.x = object.solidAreaDefaultX;
-            object.solidArea.y = object.solidAreaDefaultY;
+            object.getSolidArea().x = object.getSolidAreaDefaultX();
+            object.getSolidArea().y = object.getSolidAreaDefaultY();
 
         }
 

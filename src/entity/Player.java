@@ -13,6 +13,7 @@ public class Player extends Entity implements LivingEntity {
 
     public final int screenX;
     public final int screenY;
+    private int objectDelta;
     GamePanel gamePanel;
     KeyHandler keyHandler;
     EntityImage image = null;
@@ -23,8 +24,8 @@ public class Player extends Entity implements LivingEntity {
         this.keyHandler = keyHandler;
         this.inventory = new Inventory();
 
-        screenX = GamePanel.SCREEN_WIDTH/2 - (GamePanel.TITLE_SIZE/2);
-        screenY = GamePanel.SCREEN_HEIGHT/2 - (GamePanel.TITLE_SIZE/2);
+        screenX = GamePanel.SCREEN_WIDTH / 2 - (GamePanel.TITLE_SIZE / 2);
+        screenY = GamePanel.SCREEN_HEIGHT / 2 - (GamePanel.TITLE_SIZE / 2);
 
         setSolidArea(new Rectangle(8, 16, 32, 32));
 
@@ -52,7 +53,6 @@ public class Player extends Entity implements LivingEntity {
 
         collisionOn = false;
         gamePanel.collisionChecker.checkTitle(this);
-        int objectIndex = gamePanel.collisionChecker.checkObject(this, true);
 
         if (!collisionOn) {
             switch (keyHandler.getDirection()) {
@@ -63,36 +63,86 @@ public class Player extends Entity implements LivingEntity {
             }
         }
         if (getAction() == Action.PICKUP) {
+            int objectIndex = gamePanel.collisionChecker.checkObject(this, true);
             pickUpObject(objectIndex);
         }
     }
 
     public void draw(Graphics2D g) {
 
+        final Direction direction = keyHandler.getDirection();
+
         if (image.timeToUpdateSprite()) {
-            image.updateSprite(keyHandler.getDirection());
+            image.updateSprite(direction);
         }
 
         if (keyHandler.isDirectionChanged()) {
-            image.updateDirection(keyHandler.getDirection());
+            image.updateDirection(direction);
         }
+
+        objectDelta = drawObjectInHands(direction);
+
+        drawBeforeBody(direction, g);
 
         g.drawImage(image.getCurrentImage(), screenX, screenY, GamePanel.TITLE_SIZE, GamePanel.TITLE_SIZE, null);
 
+        drawAfterBody(direction, g);
 
-        if (inventory.getLeftHand() != null) {
-            g.drawImage(inventory.getLeftHand().image, screenX - 20, screenY, GamePanel.TITLE_SIZE, GamePanel.TITLE_SIZE, null);
+    }
+
+    private void drawBeforeBody(Direction direction, Graphics2D g) {
+        if (direction == Direction.UP) {
+            if (inventory.getLeftHand() != null) {
+                g.drawImage(inventory.getLeftHand().getImage(), screenX - objectDelta, screenY, GamePanel.TITLE_SIZE, GamePanel.TITLE_SIZE, null);
+            }
+            if (inventory.getRightHand() != null) {
+                g.drawImage(inventory.getRightHand().getImage(), screenX + objectDelta, screenY + 10, GamePanel.TITLE_SIZE, GamePanel.TITLE_SIZE, null);
+            }
+        } else if (direction == Direction.RIGHT) {
+            if (inventory.getLeftHand() != null) {
+                g.drawImage(inventory.getLeftHand().getImage(), screenX - objectDelta, screenY, GamePanel.TITLE_SIZE, GamePanel.TITLE_SIZE, null);
+            }
+        } else if (direction == Direction.LEFT && inventory.getRightHand() != null) {
+            g.drawImage(inventory.getRightHand().getImage(), screenX + objectDelta, screenY + 10, GamePanel.TITLE_SIZE, GamePanel.TITLE_SIZE, null);
+        } else if (direction == Direction.NONE) {
+            drawBeforeBody(keyHandler.getLastDirection(), g);
+        }
+    }
+
+    private void drawAfterBody(Direction direction, Graphics2D g) {
+        if (direction == Direction.DOWN) {
+            if (inventory.getLeftHand() != null) {
+                g.drawImage(inventory.getLeftHand().getImage(), screenX - objectDelta, screenY, GamePanel.TITLE_SIZE, GamePanel.TITLE_SIZE, null);
+            }
+            if (inventory.getRightHand() != null) {
+                g.drawImage(inventory.getRightHand().getImage(), screenX + objectDelta, screenY + 10, GamePanel.TITLE_SIZE, GamePanel.TITLE_SIZE, null);
+            }
+        } else if (direction == Direction.LEFT) {
+            if (inventory.getLeftHand() != null) {
+                g.drawImage(inventory.getLeftHand().getImage(), screenX - objectDelta, screenY, GamePanel.TITLE_SIZE, GamePanel.TITLE_SIZE, null);
+            }
+        } else if (direction == Direction.RIGHT && inventory.getRightHand() != null) {
+            g.drawImage(inventory.getRightHand().getImage(), screenX + objectDelta, screenY + 10, GamePanel.TITLE_SIZE, GamePanel.TITLE_SIZE, null);
+        } else if (direction == Direction.NONE) {
+            drawAfterBody(keyHandler.getLastDirection(), g);
+        }
+    }
+
+    private int drawObjectInHands(Direction direction) {
+        if (direction == Direction.UP || direction == Direction.DOWN) {
+            return 20;
+        } else if (direction == Direction.RIGHT || direction == Direction.LEFT) {
+            return 0;
         }
 
-        if (inventory.getRightHand() != null) {
-            g.drawImage(inventory.getRightHand().image, screenX + 20, screenY + 15, GamePanel.TITLE_SIZE, GamePanel.TITLE_SIZE, null);
-        }
+        return objectDelta;
     }
 
     @Override
     public Direction getDirection() {
         return keyHandler.getDirection();
     }
+
     @Override
     public Action getAction() {
         return keyHandler.getAction();

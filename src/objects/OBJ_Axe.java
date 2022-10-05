@@ -7,12 +7,12 @@ public class OBJ_Axe extends SuperObject{
 
     public OBJ_Axe(int x, int y) {
 
-        name = "Axe";
-        worldX = x;
-        worldY = y;
+        setName("Axe");
+        setWorldX(x);
+        setWorldY(y);
 
         try {
-            image = ImageIO.read(getClass().getResourceAsStream("/objects/axe.png"));
+            setImage(ImageIO.read(getClass().getResourceAsStream("/objects/axe.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

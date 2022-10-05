@@ -40,7 +40,11 @@ public class KeyHandler implements KeyListener, MouseListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        lastDirection = direction;
+
+        if (direction != Direction.NONE) {
+            lastDirection = direction;
+        }
+
         direction = Direction.NONE;
         action = Action.NONE;
     }

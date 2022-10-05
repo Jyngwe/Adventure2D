@@ -7,12 +7,12 @@ public class OBJ_Shield extends SuperObject{
 
     public OBJ_Shield(int x, int y) {
 
-        name = "Shield";
-        worldX = x;
-        worldY = y;
+        setName("Shield");
+        setWorldX(x);;
+        setWorldY(y);;
 
         try {
-            image = ImageIO.read(getClass().getResourceAsStream("/objects/shield.png"));
+            setImage(ImageIO.read(getClass().getResourceAsStream("/objects/shield.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

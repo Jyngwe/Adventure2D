@@ -1,20 +1,24 @@
 package objects;
 
+import lombok.Getter;
+import lombok.Setter;
 import main.GamePanel;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+@Getter
+@Setter
 public abstract class SuperObject implements Interactable {
 
-    public BufferedImage image;
-    public String name;
-    public int worldX;
-    public int worldY;
+    private BufferedImage image;
+    private String name;
+    private int worldX;
+    private int worldY;
 
-    public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
-    public int solidAreaDefaultX = 0;
-    public int solidAreaDefaultY = 0;
+    private Rectangle solidArea = new Rectangle(0, 0, 48, 48);
+    private int solidAreaDefaultX = 0;
+    private int solidAreaDefaultY = 0;
 
     public boolean collission;
 
